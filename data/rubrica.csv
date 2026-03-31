@@ -1,0 +1,5 @@
+id,nome,cognome,telefono,mail,created_at,updated_at
+1,Piero,Filippi,3245679865,paolo@esempio.it,10294754,10294754
+1,Anna,Filippi,3245679865,paolo@esempio.it,10294754,10294754
+1,Anna,Mantovani,3245679865,paolo@esempio.it,10294754,10294754
+1,Piero,Mantovani,3245679865,paolo@esempio.it,10294754,10294754

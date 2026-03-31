@@ -1,6 +1,12 @@
 import wx
 from frames.index import MyFrame
+from engine.editor_rubrica import EditorRubrica
 
-app = wx.App()
-frame = MyFrame()
-app.MainLoop()
+
+if __name__ == "__main__":
+
+    editor = EditorRubrica(data_path="./data/rubrica.csv")
+
+    app = wx.App()
+    frame = MyFrame()
+    app.MainLoop()
