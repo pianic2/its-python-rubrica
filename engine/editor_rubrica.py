@@ -1,6 +1,6 @@
 import os
 import csv
-
+from schemas.rubrica_schema import RubricaSchema, RubricaCreateSchema, RubricaUpdateSchema, RubricaDeleteSchema
 class EditorRubrica:
 
     def __init__(self, data_path: str):
@@ -11,6 +11,9 @@ class EditorRubrica:
             self.data_path = data_path
 
             self.carica_contatti()
+
+            self.maxId = self.contatti.sort(key=lambda x: (x[0]), reverse = True)[0][0]
+
 
         except Exception as e:
             print(f"Errore durante l'inizializzazione: {e}")
@@ -51,4 +54,24 @@ class EditorRubrica:
 
         except Exception as e:
             print(f"Errore durante la visualizzazione dei contatti: {e}")
+            raise
+
+    def aggiungi_contatto(self, contatto: RubricaCreateSchema):
+        """Aggiunge un nuovo contatto alla rubrica."""
+        try:
+
+            if not isinstance(contatto, RubricaCreateSchema):
+                raise ValueError("Il contatto deve essere un'istanza di RubricaCreateSchema.")
+            
+            contatto.id = self.maxId + 1
+            self.maxId += 1
+
+
+            with open(self.data_path, 'a', newline='') as rubrica_file:
+                writer = csv.writer(rubrica_file)
+                writer.writerow(contatto)
+                print(f"Contatto aggiunto: {contatto}")
+
+        except Exception as e:
+            print(f"Errore durante l'aggiunta del contatto: {e}")
             raise
