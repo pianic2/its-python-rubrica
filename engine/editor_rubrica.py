@@ -1,5 +1,6 @@
 import os
 import csv
+from datetime import datetime
 from schemas.rubrica_schema import RubricaSchema, RubricaCreateSchema, RubricaUpdateSchema, RubricaDeleteSchema
 class EditorRubrica:
 
@@ -12,7 +13,7 @@ class EditorRubrica:
 
             self.carica_contatti()
 
-            self.maxId = self.contatti.sort(key=lambda x: (x[0]), reverse = True)[0][0]
+            self.maxId = max([int(contatto[0]) for contatto in self.contatti], default=0)
 
 
         except Exception as e:
@@ -56,21 +57,25 @@ class EditorRubrica:
             print(f"Errore durante la visualizzazione dei contatti: {e}")
             raise
 
-    def aggiungi_contatto(self, contatto: RubricaCreateSchema):
+    def aggiungi_contatto(self, contatto: dict):
         """Aggiunge un nuovo contatto alla rubrica."""
         try:
 
-            if not isinstance(contatto, RubricaCreateSchema):
-                raise ValueError("Il contatto deve essere un'istanza di RubricaCreateSchema.")
-            
-            contatto.id = self.maxId + 1
+            contatto["id"] = self.maxId + 1
             self.maxId += 1
 
+            contatto_validato = RubricaCreateSchema(**contatto)
+
+            if not isinstance(contatto_validato, RubricaCreateSchema):
+                raise ValueError("Il contatto deve essere un'istanza di RubricaCreateSchema.")
+            
+            contatto_validato.created_at = datetime.now()
+            contatto_validato.updated_at = datetime.now()
 
             with open(self.data_path, 'a', newline='') as rubrica_file:
                 writer = csv.writer(rubrica_file)
-                writer.writerow(contatto)
-                print(f"Contatto aggiunto: {contatto}")
+                writer.writerow(contatto_validato.model_dump().values())
+                print(f"Contatto aggiunto: {contatto_validato}")
 
         except Exception as e:
             print(f"Errore durante l'aggiunta del contatto: {e}")

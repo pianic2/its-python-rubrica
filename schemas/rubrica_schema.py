@@ -18,7 +18,7 @@ class RubricaSchema(pydantic.BaseModel):
     nome: str = pydantic.Field(..., min_length=3, max_length=50)
     cognome: str = pydantic.Field(..., min_length=3, max_length=50)
     telefono: int = pydantic.Field(..., gt=3000000000, lt=4000000000)
-    email: str = pydantic.Field(..., regex=r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+    email: str = pydantic.Field(..., pattern=r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
 
     created_at: datetime
     updated_at: datetime
